@@ -16,3 +16,8 @@ do
 	id=$(basename ${f%%.json})
 	curl -X PUT localhost:5984/map-reduce-samples/_design/$id -H "Content-Type: application/json" --data @$f
 done
+
+open http://localhost:5984/map-reduce-samples/_design/purchases/_view/by_date?reduce=false
+open http://localhost:5984/map-reduce-samples/_design/purchases/_view/by_date?group_level=1
+open http://localhost:5984/map-reduce-samples/_design/purchases/_view/by_date?group_level=2
+open "http://localhost:5984/map-reduce-samples/_design/purchases/_view/by_date?startkey=[2011]&endkey=[2011,{}]"
