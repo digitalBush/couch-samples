@@ -1,0 +1,14 @@
+{
+	"language": "javascript",
+	"views":{
+    	"by_date": {
+      		"map": "function(doc) { 
+				var date=new Date(doc.Timestamp);
+				emit([date.getFullYear(),date.getMonth()+1,date.getDate()], doc.Amount);
+			}",
+			"reduce": "function(keys, values) { 
+				return sum(values);
+			}"
+    	}
+  	}
+}
