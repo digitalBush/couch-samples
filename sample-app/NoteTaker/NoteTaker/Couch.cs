@@ -23,29 +23,24 @@ public static class Couch
 
 
 
-    public static string Put(this Uri uri, string path, string data)
+    public static string Put(this Uri uri, object id, string data)
     {
-        var destination = new Uri(uri, path);
+        var destination = new Uri(uri, id.ToString());
         return doRequest(destination, "PUT", data);
     }
 
-    public static string Post(this Uri uri, string path, string data)
-    {
-        var destination = new Uri(uri, path);
-        return doRequest(destination, "POST", data);
-    }
 
-    public static string Delete(this Uri uri, string id,string rev)
+    public static string Delete(this Uri uri, object id,string rev)
     {
-        var destination = new UriBuilder(new Uri(uri,id));
+        var destination = new UriBuilder(new Uri(uri,id.ToString()));
         destination.Query = String.Format("rev={0}", rev);
         
         return doRequest(destination.Uri, "DELETE", "");
     }
 
-    public static string Get(this Uri uri, string path)
+    public static string Get(this Uri uri, object id)
     {
-        var destination = new Uri(uri, path);
+        var destination = new Uri(uri, id.ToString());
         var client = new WebClient();
         return client.DownloadString(destination);
     }

@@ -31,7 +31,7 @@ namespace NoteTaker.Controllers
 
         public ActionResult Edit(Guid id)
         {
-            var json=Couch.Uri.Get(id.ToString());
+            var json=Couch.Uri.Get(id);
             return View(JsonConvert.DeserializeObject<Note>(json));
         }
 
@@ -40,7 +40,7 @@ namespace NoteTaker.Controllers
         {
             try
             {
-                Couch.Uri.Put(note.Id.ToString(), JsonConvert.SerializeObject(note));
+                Couch.Uri.Put(note.Id, JsonConvert.SerializeObject(note));
                 return RedirectToAction("Edit", new { id = note.Id });
             }
             catch (WebException ex)
@@ -57,7 +57,7 @@ namespace NoteTaker.Controllers
 
         public ActionResult Delete(Guid id,string rev)
         {
-            var json = Couch.Uri.Delete(id.ToString(),rev);
+            var json = Couch.Uri.Delete(id,rev);
             return RedirectToAction("Index");
         }
 
