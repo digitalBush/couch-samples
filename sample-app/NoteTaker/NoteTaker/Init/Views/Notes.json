@@ -1,0 +1,13 @@
+﻿{
+    "language": "javascript",
+    "views":{
+        "all":{
+            "map": "
+				function(doc){
+					if(doc._id.indexOf('_design')===0)
+						return;
+					emit(doc._id,null);
+				}"
+        }
+    }
+}

@@ -7,6 +7,10 @@ using System.Net;
 using System.Text;
 using System.IO;
 using Newtonsoft.Json;
+using System.Runtime.Serialization;
+using Newtonsoft.Json.Converters;
+using NoteTaker.Models;
+using Newtonsoft.Json.Linq;
 
 
 public static class Couch
@@ -20,8 +24,6 @@ public static class Couch
     {
         get { return new Uri(Database); }
     }
-
-
 
     public static string Put(this Uri uri, object id, string data)
     {
@@ -46,13 +48,12 @@ public static class Couch
     }
 
     static string doRequest(Uri uri, string method, string data)
-    {
-        
+    {   
         var request = WebRequest.Create(uri);
         request.Method = method;
 
         var bytes = Encoding.UTF8.GetBytes(data);
-        request.ContentType = "application/json; charset=utf-8";
+        request.ContentType = "application/json";
         request.ContentLength = bytes.Length;
 
         var writer = request.GetRequestStream();
@@ -76,12 +77,24 @@ public class DocumentCollection<T> where T:class
     public int Count { get; set; }
 
     [JsonProperty("rows")]
-    public IEnumerable<ViewDocument<T>> Items { get; set; }
+    public IEnumerable<ViewResult<T>> Items { get; set; }
 }
 
-public class ViewDocument<T> where T : class
+public class ViewResult<T> where T : class
 {
-    
+    [JsonProperty("id")]
+    public string Id { get; set; }
+
+    [JsonProperty("key")]
+    public string Key { get; set; }
+
+    [JsonProperty("value")]
+    public string Value { get; set; }
+
     [JsonProperty("doc")]
-    public T Item { get; set; }
+    public T Document { get; set; }
 }
+
+
+
+

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using NoteTaker.Init;
 
 namespace NoteTaker
 {
@@ -31,6 +32,7 @@ namespace NoteTaker
 
         protected void Application_Start()
         {
+            DesignDocuments.Init();
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);
