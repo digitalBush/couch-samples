@@ -1,4 +1,4 @@
-﻿@model IEnumerable<NoteTaker.Models.Note>
+﻿@model NoteTaker.Models.NoteList
 
 @{
     ViewBag.Title = "List";
@@ -14,21 +14,33 @@
         </th>
         <th></th>
     </tr>
-
-@foreach (var item in Model) {
+@if (!Model.Notes.Any()){
+     <tr>
+        <td colspan=2>
+            <em>No Notes to show.</em>
+        </td>
+    </tr>
+}
+@foreach (var item in Model.Notes)
+{
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Title)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id,rev=item.Revision })
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id, rev = item.Revision })
         </td>
     </tr>
 }
 
 </table>
-
+<ul>
+<li><a href='/Note'>View All</a></li>
+@foreach (var tag in Model.Tags.OrderByDescending(x=>x.Value)) { 
+    <li><a href='/Note/Tagged/@tag.Key'>@(tag.Key)(@tag.Value)</a></li>
+}
+</ul>
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>

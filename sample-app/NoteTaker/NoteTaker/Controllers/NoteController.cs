@@ -16,11 +16,47 @@ namespace NoteTaker.Controllers
 
         public ActionResult Index()
         {
-            var json = Couch.Uri.Get("_all_docs?include_docs=true");
-            var notes = JsonConvert.DeserializeObject<DocumentCollection<Note>>(json);
-            
-            return View(notes.Items.Select(i=>i.Item));
+            var notes = GetNotes();
+            var tags = GetTags();
+
+            return View(new NoteList()
+            {
+                 Notes=notes.Items.Select(n=>n.Document),
+                 Tags=tags.Items.ToDictionary(x=>x.Key,x=>Int32.Parse(x.Value))
+            });
         }
+
+        public ActionResult Tagged(string id)
+        {
+            var notes = GetNotesByTag(id);
+            var tags = GetTags();
+
+            return View("Index",new NoteList()
+            {
+                Notes = notes.Items.Select(n => n.Document),
+                Tags = tags.Items.ToDictionary(x => x.Key, x => Int32.Parse(x.Value))
+            });
+        }
+
+        public DocumentCollection<Note> GetNotes()
+        {
+            var json = Couch.Uri.Get("_design/Notes/_view/all?include_docs=true");
+            return JsonConvert.DeserializeObject<DocumentCollection<Note>>(json);
+        }
+
+        public DocumentCollection<Note> GetNotesByTag(string tag)
+        {
+            var json = Couch.Uri.Get("_design/Tags/_view/all?key=\""+tag+"\"&reduce=false&include_docs=true");
+            return JsonConvert.DeserializeObject<DocumentCollection<Note>>(json);
+        }
+
+        public DocumentCollection<object> GetTags()
+        {
+            var json = Couch.Uri.Get("_design/Tags/_view/all?group_level=1");
+            return JsonConvert.DeserializeObject<DocumentCollection<object>>(json);
+        }
+
+
 
         public ActionResult Create()
         {
