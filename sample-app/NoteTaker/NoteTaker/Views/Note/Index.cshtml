@@ -1,46 +1,66 @@
-﻿@model NoteTaker.Models.NoteList
+﻿@using NoteTaker.Models
+@model NoteTaker.Models.NoteList
 
 @{
     ViewBag.Title = "List";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Notes</h2>
 
-<table>
-    <tr>
-        <th>
-            Title
-        </th>
-        <th></th>
-    </tr>
-@if (!Model.Notes.Any()){
-     <tr>
-        <td colspan=2>
-            <em>No Notes to show.</em>
-        </td>
-    </tr>
-}
-@foreach (var item in Model.Notes)
-{
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.Id, rev = item.Revision })
-        </td>
-    </tr>
-}
+<div class="row">
+    <div class="span8">
+        <h2>Notes</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th colspan="2">
+                        Title
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Notes.Any()) {
+                    <tr>
+                        <td colspan=2>
+                            <em>No Notes to show.</em>
+                        </td>
+                    </tr>
+                }
+                @foreach (Note item in Model.Notes) {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            <span class='pull-right'>
+                                @Html.ActionLink("Edit", "Edit", new {id = item.Id},new{@class="btn btn-mini"})
+                                @Html.ActionLink("Delete", "Delete", new { id = item.Id, rev = item.Revision }, new { @class = "btn btn-mini" })
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
 
-</table>
-<ul>
-<li><a href='/Note'>View All</a></li>
-@foreach (var tag in Model.Tags.OrderByDescending(x=>x.Value)) { 
-    <li><a href='/Note/Tagged/@tag.Key'>@(tag.Key)(@tag.Value)</a></li>
-}
-</ul>
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+        </table>
+        <p>
+            <a class='btn' href="/Note/Create"><i class="icon-plus"></i> Create a Note</a>
+        </p>
+    </div>
+
+    <div class="span4">
+        <h2>Tagged</h2>
+        <div class='well'>
+            <!--<li><a href='/Note'>View All</a></li>-->
+            @foreach (var tag in Model.Tags.OrderByDescending(x => x.Value)) {
+                <div class='row'>
+                    <span class="span2">
+                        <a href='/Note/Tagged/@tag.Key'>@(tag.Key)</a>
+                    </span>
+                    <span class="span1">
+                        <span class='badge'>@tag.Value</span>
+                    </span>
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -5,51 +5,49 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@using (Html.BeginForm("Edit","Note")) {
+@using (Html.BeginForm("Edit","Note",FormMethod.Post,new{@class="form-horizontal"})) {
     @Html.ValidationSummary(true)
     <fieldset>
         <legend>Note</legend>
 
         @Html.HiddenFor(model => model.Id)
+        
+        <div class="control-group">
+            <label class="control-label" for="Revision">Revision</label>
+            <div class="controls">
+                @Html.HiddenFor(model => model.Revision)
+                <h3>@(Model.Revision??"New Document")</h3>
+                @Html.ValidationMessageFor(model => model.Revision)
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="Title">Title</label>
+            <div class="controls">
+                @Html.EditorFor(model => model.Title)
+            </div>
+        </div>
+        
+        <div class="control-group">
+          <label class="control-label" for="Text">Text</label>
+            <div class="controls">
+               @Html.TextAreaFor(model => model.Text)
+            </div>
+        </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Revision)
-        </div>
-        <div class="editor-field">
-            @Html.HiddenFor(model => model.Revision)
-            @(Model.Revision??"New Document")
-            @Html.ValidationMessageFor(model => model.Revision)
-           
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Title)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Title)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Text)
-        </div>
-        <div class="editor-field">
-            @Html.TextAreaFor(model => model.Text)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Tags)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Tags)
+        <div class="control-group">
+            <label class="control-label" for="Tags">Tags</label>
+            <div class="controls">
+                @Html.EditorFor(model => model.Tags)
             <em>(separated by spaces)</em>
+            </div>
         </div>
-
-        <p>
-            <input type="submit" value="Save" /> 
-        </p>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save changes</button>
+            <a href="/" class='btn'>Cancel</a>
+          </div>
     </fieldset>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+
