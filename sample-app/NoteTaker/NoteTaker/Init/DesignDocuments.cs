@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Reflection;
 using System.IO;
 using Newtonsoft.Json;
@@ -21,8 +19,8 @@ namespace NoteTaker.Init
                 var name = view.Remove(view.Length - 5).Split('.').Last();
                 var resource = assembly.GetManifestResourceStream(view);
                 string rev = FetchCurrentRevisionFor(name);
-                string json = CreateJSON(resource,rev);
-                Couch.Uri.Put("_design/" + name, json);   
+                var doc = ApplyRevision(resource,rev);
+                Couch.Uri.Put("_design/" + name, doc);   
             }
         }
 
@@ -42,13 +40,13 @@ namespace NoteTaker.Init
             }   
         }
 
-        private static string CreateJSON(Stream resource,string currentRevision)
+        private static object ApplyRevision(Stream resource,string currentRevision)
         {
             var body = new StreamReader(resource).ReadToEnd();
             dynamic obj = JsonConvert.DeserializeObject(body);
             if (!String.IsNullOrEmpty(currentRevision))
                 obj._rev = currentRevision;
-            return JsonConvert.SerializeObject(obj);
+            return obj;
         }
     }
 }

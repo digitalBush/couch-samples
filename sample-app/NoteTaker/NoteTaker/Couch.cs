@@ -19,10 +19,10 @@ public static class Couch
         get { return new Uri(Database); }
     }
 
-    public static string Put(this Uri uri, object id, string data)
-    {
+    public static string Put<T>(this Uri uri, object id, T obj) {
+        var json = JsonConvert.SerializeObject(obj);
         var destination = new Uri(uri, id.ToString());
-        return doRequest(destination, "PUT", data);
+        return doRequest(destination, "PUT", json);
     }
 
 

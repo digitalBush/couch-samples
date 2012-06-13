@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using NoteTaker.Models;
-using Newtonsoft.Json;
 using System.Net;
 
 namespace NoteTaker.Controllers
@@ -57,7 +54,6 @@ namespace NoteTaker.Controllers
 
         public ActionResult Create()
         {
-
             var note = new Note() { Id = Guid.NewGuid() };
             return View("Edit", note);
         }
@@ -73,7 +69,7 @@ namespace NoteTaker.Controllers
         {
             try
             {
-                Couch.Uri.Put(note.Id, JsonConvert.SerializeObject(note));
+                Couch.Uri.Put(note.Id,note);
                 return RedirectToAction("Edit", new { id = note.Id });
             }
             catch (WebException ex)
@@ -90,10 +86,8 @@ namespace NoteTaker.Controllers
 
         public ActionResult Delete(Guid id,string rev)
         {
-            var json = Couch.Uri.Delete(id,rev);
+            Couch.Uri.Delete(id,rev);
             return RedirectToAction("Index");
         }
-
-
     }
 }
