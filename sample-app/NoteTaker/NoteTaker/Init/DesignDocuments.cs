@@ -30,8 +30,7 @@ namespace NoteTaker.Init
         {
             try
             {
-                var json=Couch.Uri.Get("_design/" + name);
-                dynamic obj = JsonConvert.DeserializeObject(json);
+                var obj=Couch.Uri.Get<dynamic>("_design/" + name);
                 return obj._rev;
             }
             catch (WebException ex)

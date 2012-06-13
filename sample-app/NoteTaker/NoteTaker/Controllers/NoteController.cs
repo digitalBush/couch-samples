@@ -40,20 +40,17 @@ namespace NoteTaker.Controllers
 
         public DocumentCollection<Note> GetNotes()
         {
-            var json = Couch.Uri.Get("_design/Notes/_view/all?include_docs=true");
-            return JsonConvert.DeserializeObject<DocumentCollection<Note>>(json);
+            return Couch.Uri.Get<DocumentCollection<Note>>("_design/Notes/_view/all?include_docs=true");
         }
 
         public DocumentCollection<Note> GetNotesByTag(string tag)
         {
-            var json = Couch.Uri.Get("_design/Tags/_view/all?key=\""+tag+"\"&reduce=false&include_docs=true");
-            return JsonConvert.DeserializeObject<DocumentCollection<Note>>(json);
+            return Couch.Uri.Get<DocumentCollection<Note>>("_design/Tags/_view/all?key=\"" + tag + "\"&reduce=false&include_docs=true");
         }
 
         public DocumentCollection<object> GetTags()
         {
-            var json = Couch.Uri.Get("_design/Tags/_view/all?group_level=1");
-            return JsonConvert.DeserializeObject<DocumentCollection<object>>(json);
+            return Couch.Uri.Get<DocumentCollection<object>>("_design/Tags/_view/all?group_level=1");
         }
 
 
@@ -67,8 +64,8 @@ namespace NoteTaker.Controllers
 
         public ActionResult Edit(Guid id)
         {
-            var json=Couch.Uri.Get(id);
-            return View(JsonConvert.DeserializeObject<Note>(json));
+            var note=Couch.Uri.Get<Note>(id);
+            return View(note);
         }
 
         [HttpPost]

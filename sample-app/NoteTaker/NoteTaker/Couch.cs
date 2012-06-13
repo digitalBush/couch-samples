@@ -34,11 +34,12 @@ public static class Couch
         return doRequest(destination.Uri, "DELETE", "");
     }
 
-    public static string Get(this Uri uri, object id)
+    public static T Get<T>(this Uri uri, object id)
     {
         var destination = new Uri(uri, id.ToString());
         var client = new WebClient();
-        return client.DownloadString(destination);
+        var json= client.DownloadString(destination);
+        return JsonConvert.DeserializeObject<T>(json);
     }
 
     static string doRequest(Uri uri, string method, string data)
